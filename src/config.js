@@ -1,0 +1,1 @@
+export const database_path = "../classicdb_bot/db/classicdb_bot.db";
