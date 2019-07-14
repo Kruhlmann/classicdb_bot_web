@@ -28,9 +28,11 @@ export async function get(req, res, next) {
 
 		for (const item of db_items) {
 			const resolved_item = await get_item(item.item_id);
-			resolved_item[0].Current.hits = item.hits;
-			resolved_item[0].Current.id = item.item_id;
-			ii_items.push(resolved_item[0].Current);
+			if (resolved_item[0].Current) {
+				resolved_item[0].Current.hits = item.hits;
+				resolved_item[0].Current.id = item.item_id;
+				ii_items.push(resolved_item[0].Current);
+			}
 		}
 
 		res.end(JSON.stringify({

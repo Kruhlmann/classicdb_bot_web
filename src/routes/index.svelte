@@ -34,18 +34,41 @@
         <div class="viewbox-content" transition:fly={{ y: 60, duration: 1200 }}>
             <div class="overview">
                 <span>Used by {guild_count} server{guild_count === 1 ? "" : "s"}</span>
-                <span>{hits_count} items provided</span>
+                <span>{hits_count} item{hits_count === 1 ? "" : "s"} provided</span>
             </div>
             <span class="top-item">
                 <span>Most requested item: </span>
-                <a class="{topitem.Quality.toLowerCase()}" href="https://itemization.info/item/{topitem.id}">
+                <a
+                    class="{topitem.Quality.toLowerCase()}"
+                    href="https://itemization.info/item/{topitem.id}"
+                >
                     {topitem.Name}
                 </a>
             </span>
             <div class="split">
                 <div class="left">
                     <table>
-
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>name</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        {#each items as item}
+                            <tr>
+                                <td>{item.id}</td>
+                                <td class="{item.Quality.toLowerCase()}" >
+                                    <a
+                                        class="{item.Quality.toLowerCase()}"
+                                        href="https://itemization.info/item/{item.id}"
+                                    >
+                                        {item.Name}
+                                    </a>
+                                </td>
+                                <td>{item.hits}</td>
+                            </tr>
+                        {/each}
                     </table>
                 </div>
             </div>
