@@ -63,11 +63,11 @@
                 </div>
                 <div class="right">
                     <span class="table-title">Used by {guilds.length} server{guilds.length === 1 ? "" : "s"}</span>
-                    <div class="server-table">
+                    <div class="server-table" >
                         {#each guilds as guild}
                             {#if guild.icon && guild.name}
                                 <div class="guild">
-                                    <img class="guild-icon" alt="guild icon" src="{guild.icon}">
+                                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guild.icon}">
                                     <div class="guild-tooltip">
                                         <span>{guild.name}</span>
                                     </div>
@@ -192,6 +192,7 @@
         height: 75px;
         border-radius: 50%;
         border: 2px solid #444;
+        margin: 5px;
     }
 
     .guild:hover > .guild-tooltip {
