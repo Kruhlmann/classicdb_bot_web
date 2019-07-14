@@ -29,7 +29,10 @@
 </script>
 
 <div class="viewbox">
-    <h1 class="main-title">classic db bot</h1>
+    <div class="title-container">
+        <img src="/icons/favicon-96x96.png" alt="wow icon">
+        <h1 class="main-title">classic db bot</h1>
+    </div>
     {#if loaded}
         <div class="viewbox-content" transition:fly={{ y: 60, duration: 1200 }}>
             <div class="overview">
@@ -47,7 +50,7 @@
             </span>
             <div class="split">
                 <div class="left">
-                    <table>
+                    <table class="item-table">
                         <thead>
                             <tr>
                                 <th>id</th>
@@ -55,21 +58,19 @@
                                 <th>#</th>
                             </tr>
                         </thead>
-                        {#each items as item}
-                            <tr>
-                                <td>{item.id}</td>
-                                <td class="{item.Quality.toLowerCase()}" >
-                                    <a
-                                        class="{item.Quality.toLowerCase()}"
-                                        href="https://itemization.info/item/{item.id}"
-                                    >
-                                        {item.Name}
-                                    </a>
-                                </td>
-                                <td>{item.hits}</td>
-                            </tr>
-                        {/each}
+                        <tbody>
+                            {#each items as item}
+                                    <tr on:click={() => window.location.href = `https://itemization.info/item/${item.id}`}>
+                                        <td>{item.id}</td>
+                                        <td class="{item.Quality.toLowerCase()}">{item.Name}</td>
+                                        <td>{item.hits}</td>
+                                    </tr>
+                            {/each}
+                        </tbody>
                     </table>
+                </div>
+                <div class="right">
+
                 </div>
             </div>
         </div>
@@ -77,12 +78,28 @@
 </div>
 
 <style>
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
     .viewbox {
         display: flex;
         flex-direction: column;
         align-items: center;
         flex: 1;
         color: white;
+    }
+
+    .title-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .title-container img {
+        width: 85px;
+        height: 85px;
+        margin-right: 15px;
     }
 
     .main-title {
@@ -111,6 +128,43 @@
         width: 100%;
         font-size: 32px;
         text-align: center;
+    }
+
+    .split {
+        width: 100%;
+        display: flex;
+    }
+
+    .split .left, .split .right {
+        width: 50%;
+        margin: 0 10px;
+    }
+
+    .item-table {
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    .item-table thead {
+        text-transform: uppercase;
+        background-color: #373737;
+        font-size: 18px;
+    }
+
+    .item-table td, .item-table th {
+        padding: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .item-table tbody tr:nth-child(even) {
+        background-color: #323232;
+    }
+
+    .item-table tbody tr:hover {
+        cursor: pointer;
+        background-color: #373737;
     }
 
     .artifact {
