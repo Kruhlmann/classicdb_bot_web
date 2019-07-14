@@ -163,6 +163,12 @@
         text-decoration: underline;
     }
 
+    .server-table {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     .guild-icon {
         display: block;
         width: 100%;
