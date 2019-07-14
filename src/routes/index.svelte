@@ -62,7 +62,11 @@
                             {#each items as item}
                                     <tr on:click={() => window.location.href = `https://itemization.info/item/${item.id}`}>
                                         <td>{item.id}</td>
-                                        <td class="{item.Quality.toLowerCase()}">{item.Name}</td>
+                                        <td
+                                            class="name {item.Quality.toLowerCase()}"
+                                        >
+                                            {item.Name}
+                                        </td>
                                         <td>{item.hits}</td>
                                     </tr>
                             {/each}
@@ -130,6 +134,10 @@
         text-align: center;
     }
 
+    .top-item a:hover {
+        text-decoration: underline;
+    }
+
     .split {
         width: 100%;
         display: flex;
@@ -165,6 +173,10 @@
     .item-table tbody tr:hover {
         cursor: pointer;
         background-color: #373737;
+    }
+
+    .item-table tbody tr:hover .name {
+        text-decoration: underline;
     }
 
     .artifact {
