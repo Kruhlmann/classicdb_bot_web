@@ -43,11 +43,11 @@ export async function get(req, res, next) {
 		}
 
 		res.end(JSON.stringify({
-			guilds,
+			guilds: guilds.slice(0, 62),
 			hits_count: db_items.reduce((sum, b) => {
 				return {hits: sum.hits + parseInt(b.hits)}
 			}).hits,
-			items: ii_items.sort((a, b) => b.hits - a.hits).slice(0, 15),
+			items: ii_items.sort((a, b) => b.hits - a.hits).slice(0, 17),
 		}));
 	} catch (err) {
 		console.log(err)
