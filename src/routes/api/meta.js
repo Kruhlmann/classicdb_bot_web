@@ -31,9 +31,15 @@ export async function get(req, res, next) {
 			if (resolved_item.length < 1 || !resolved_item[0].Current) {
 				continue;
 			}
-			resolved_item[0].Current.hits = item.hits;
-			resolved_item[0].Current.id = item.item_id;
-			ii_items.push(resolved_item[0].Current);
+
+			const existing_item = ii_items.find((i) => i.id === item.item_id);
+			if (existing_item) {
+				existing_item.hits += item.hits;
+			} else {
+				resolved_item[0].Current.hits = item.hits;
+				resolved_item[0].Current.id = item.item_id;
+				ii_items.push(resolved_item[0].Current);
+			}
 		}
 
 		res.end(JSON.stringify({

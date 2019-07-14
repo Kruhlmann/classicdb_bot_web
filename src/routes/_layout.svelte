@@ -7,7 +7,6 @@
 <style>
     :global(html) {
         height: 100%;
-        overflow: hidden;
         background-color: #272727;
     }
 
