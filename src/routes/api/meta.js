@@ -48,7 +48,6 @@ export async function get(req, res, next) {
 				return {hits: sum.hits + parseInt(b.hits)}
 			}).hits,
 			items: ii_items.sort((a, b) => b.hits - a.hits).slice(0, 15),
-			topitem: ii_items.sort((a, b) => b.hits - a.hits)[0],
 		}));
 	} catch (err) {
 		console.log(err)
