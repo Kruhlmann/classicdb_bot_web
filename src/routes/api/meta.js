@@ -43,7 +43,7 @@ export async function get(req, res, next) {
 		}
 
 		res.end(JSON.stringify({
-			guilds: guilds.slice(0, 62),
+			guilds,
 			hits_count: db_items.reduce((sum, b) => {
 				return {hits: sum.hits + parseInt(b.hits)}
 			}).hits,
