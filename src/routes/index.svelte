@@ -1,21 +1,12 @@
 <script context="module">
     export function preload() {
         return this.fetch("/api/meta").then((r) => r.json()).then((stats) => {
-            return this.fetch(`https://itemization.info/item/${stats.top_item}`)
-                .then((r) => r.text())
-                .then((html) => {
-                    const r = /<span class="(legendary|rare) name">(.*?)<\/span>/gm;
-                    const match = r.exec(html);
-                    return {
-                        guild_count: stats.guild_count,
-                        hits_count: stats.hits_count,
-                        top_item: {
-                            id: stats.top_item,
-                            quality: match[1],
-                            name: match[2],
-                        }
-                    };
-                });
+            return {
+                guild_count: stats.guild_count,
+                hits_count: stats.hits_count,
+                items: stats.items,
+                topitem: stats.topitem,
+            };
         });
     }
 </script>
@@ -26,7 +17,8 @@
 
     export let guild_count;
     export let hits_count;
-    export let top_item;
+    export let items;
+    export let topitem;
 
     let loaded = false;
 
@@ -46,13 +38,15 @@
             </div>
             <span class="top-item">
                 <span>Most requested item: </span>
-                <a class="{top_item.quality}" href="https://itemization.info/item/{top_item.id}">
-                    {top_item.name}
+                <a class="{topitem.Quality.toLowerCase()}" href="https://itemization.info/item/{topitem.id}">
+                    {topitem.Name}
                 </a>
             </span>
             <div class="split">
                 <div class="left">
-                    
+                    <table>
+
+                    </table>
                 </div>
             </div>
         </div>
@@ -83,16 +77,16 @@
 
     .overview {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-evenly;
         width: 50%;
         font-size: 32px;
-        margin: 15px 0;
+        margin-bottom: 10px;
     }
 
     .top-item {
-        margin: 15px 0;
+        margin-bottom: 10px;
         width: 100%;
-        font-size: 42px;
+        font-size: 32px;
         text-align: center;
     }
 
