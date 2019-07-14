@@ -22,7 +22,7 @@ export async function get(req, res, next) {
 			"Content-Type": "application/json",
 		});
 
-		const guild_count = await db.get("SELECT COUNT(*) from guild_configs");
+		const guilds = await db.all("SELECT * FROM guild_configs");
 		const db_items = await db.all("SELECT * FROM queries ORDER BY hits DESC");
 		const ii_items = [];
 
@@ -43,7 +43,7 @@ export async function get(req, res, next) {
 		}
 
 		res.end(JSON.stringify({
-			guild_count: guild_count["COUNT(*)"],
+			guilds,
 			hits_count: db_items.reduce((a, b) => a.hits + b.hits),
 			items: ii_items.sort((a, b) => b.hits - a.hits).slice(0, 15),
 			topitem: ii_items.sort((a, b) => b.hits - a.hits)[0],

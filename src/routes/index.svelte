@@ -2,7 +2,7 @@
     export function preload() {
         return this.fetch("/api/meta").then((r) => r.json()).then((stats) => {
             return {
-                guild_count: stats.guild_count,
+                guilds: stats.guilds,
                 hits_count: stats.hits_count,
                 items: stats.items,
                 topitem: stats.topitem,
@@ -15,7 +15,7 @@
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";
 
-    export let guild_count;
+    export let guilds;
     export let hits_count;
     export let items;
     export let topitem;
@@ -35,21 +35,9 @@
     </div>
     {#if loaded}
         <div class="viewbox-content" transition:fly={{ y: 60, duration: 1200 }}>
-            <div class="overview">
-                <span>Used by {guild_count} server{guild_count === 1 ? "" : "s"}</span>
-                <span>{hits_count} item{hits_count === 1 ? "" : "s"} provided</span>
-            </div>
-            <span class="top-item">
-                <span>Most requested item: </span>
-                <a
-                    class="{topitem.Quality.toLowerCase()}"
-                    href="https://itemization.info/item/{topitem.id}"
-                >
-                    {topitem.Name}
-                </a>
-            </span>
             <div class="split">
                 <div class="left">
+                    <span class="table-title">{hits_count} item link{hits_count === 1 ? "" : "s"} sent</span>
                     <table class="item-table">
                         <thead>
                             <tr>
@@ -74,7 +62,15 @@
                     </table>
                 </div>
                 <div class="right">
-
+                    <span class="table-title">Used by {guilds.length} server{guilds.length === 1 ? "" : "s"}</span>
+                    <div class="server-table">
+                        {#each guilds as guild}
+                            <div class="guild">
+                                <span class="name">{guild.name}</span>
+                                <img src="{guild.icon}" alt="guild icon">
+                            </div>
+                        {/each}
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,11 +78,6 @@
 </div>
 
 <style>
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
-
     .viewbox {
         display: flex;
         flex-direction: column;
@@ -112,30 +103,16 @@
         font-weight: 300;
     }
 
+    .table-title {
+        font-size: 26px;
+        margin-bottom: 5px;
+    }
+
     .viewbox-content {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
-    }
-
-    .overview {
-        display: flex;
-        justify-content: space-evenly;
-        width: 50%;
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
-
-    .top-item {
-        margin-bottom: 10px;
-        width: 100%;
-        font-size: 32px;
-        text-align: center;
-    }
-
-    .top-item a:hover {
-        text-decoration: underline;
     }
 
     .split {
@@ -145,6 +122,9 @@
 
     .split .left, .split .right {
         width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin: 0 10px;
     }
 
