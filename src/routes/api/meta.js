@@ -45,7 +45,7 @@ export async function get(req, res, next) {
 		res.end(JSON.stringify({
 			guild_count: guild_count["COUNT(*)"],
 			hits_count: db_items.reduce((a, b) => a.hits + b.hits),
-			items: ii_items,
+			items: ii_items.slice(0, 15),
 			topitem: ii_items.sort((a, b) => b.hits - a.hits)[0],
 		}));
 	} catch (err) {
