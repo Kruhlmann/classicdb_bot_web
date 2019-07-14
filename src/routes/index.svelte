@@ -24,7 +24,7 @@
 
     onMount(() => {
         loaded = true;
-    })
+    });
 
 </script>
 
@@ -48,15 +48,15 @@
                         </thead>
                         <tbody>
                             {#each items as item}
+                                {#if item.hits > 0}
                                     <tr on:click={() => window.location.href = `https://itemization.info/item/${item.id}`}>
                                         <td>{item.id}</td>
-                                        <td
-                                            class="name {item.Quality.toLowerCase()}"
-                                        >
+                                        <td class="name {item.Quality.toLowerCase()}" >
                                             {item.Name}
                                         </td>
                                         <td>{item.hits}</td>
                                     </tr>
+                                {/if}
                             {/each}
                         </tbody>
                     </table>
@@ -67,8 +67,10 @@
                         {#each guilds as guild}
                             {#if guild.icon && guild.name}
                                 <div class="guild">
-                                    <span class="name">{guild.name}</span>
-                                    <img src="{guild.icon}">
+                                    <img class="guild-icon" alt="guild icon" src="{guild.icon}">
+                                    <div class="guild-tooltip">
+                                        <span>{guild.name}</span>
+                                    </div>
                                 </div>
                             {/if}
                         {/each}
@@ -159,6 +161,41 @@
 
     .item-table tbody tr:hover .name {
         text-decoration: underline;
+    }
+
+    .guild-icon {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        cursor: default;
+    }
+
+    .guild-tooltip {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        border-radius: 50%;
+        top: -100%;
+        position: relative;
+        opacity: 0;
+        cursor: default;
+        font-size: 11px;
+        background-color: rgba(0, 0, 0, 0.7);
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .guild {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        border: 2px solid #444;
+    }
+
+    .guild:hover > .guild-tooltip {
+        opacity: 1;
     }
 
     .artifact {
