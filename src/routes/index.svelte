@@ -82,6 +82,9 @@
                                 </div>
                             {/if}
                         {/each}
+                        {#if guilds.length > 62}
+                            <div class="guild">... and {guilds.length - 62}</div>
+                        {/if}
                     </div>
                 </div>
             </div>
