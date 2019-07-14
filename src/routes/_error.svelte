@@ -16,14 +16,18 @@
 {/if}
 
 <style lang="scss">
-    :global(html, body) {
+    :global(html) {
         height: 100%;
         overflow: hidden;
+        background-color: #272727;
+    }
+
+    :global(body) {
+        height: auto;
         font-family: "Roboto", sans-serif;
         padding: 0;
         margin: 0;
-	}
-
+    }
 	h1 {
 		font-size: 42px;
 		text-transform: uppercase;
