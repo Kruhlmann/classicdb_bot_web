@@ -72,7 +72,7 @@
                 <div class="right">
                     <span class="table-title">Used by {guilds.length} server{guilds.length === 1 ? "" : "s"}</span>
                     <div class="server-table" >
-                        {#each guilds.slice(0, 62) as guild}
+                        {#each guilds as guild}
                             {#if guild.icon && guild.name}
                                 <div class="guild">
                                     <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guild.icon}">
