@@ -11,7 +11,7 @@
     }
 
     :global(body) {
-        height: auto;
+        height: 100%;
         font-family: "Roboto", sans-serif;
         padding: 0;
         margin: 0;

@@ -18,10 +18,24 @@
     export let hits_count;
     export let items;
 
+    const missing_guilds = guilds.filter((g) => !g.icon && !g.name).length;
+
     let loaded = false;
+    let max_height = 0;
+    let title_container;
+    let split_header;
+
+    function update_height() {
+        max_height = window.innerHeight
+            - title_container.clientHeight
+            - split_header.clientHeight
+            - 20;
+    }
 
     onMount(() => {
         loaded = true;
+        update_height();
+        window.addEventListener("resize", update_height);
     });
 
 </script>
@@ -37,15 +51,22 @@
 </div>
 
 <div class="viewbox">
-    <div class="title-container">
+    <div class="title-container" bind:this={title_container}>
         <img src="/icons/favicon-96x96.png" alt="wow icon">
         <h1 class="main-title">classic db bot</h1>
     </div>
     {#if loaded}
         <div class="viewbox-content" transition:fly={{ y: 60, duration: 1200 }}>
-            <div class="split">
+            <div class="split-headers" bind:this={split_header}>
                 <div class="left">
                     <span class="table-title">{hits_count} item link{hits_count === 1 ? "" : "s"} sent</span>
+                </div>
+                <div class="right">
+                    <span class="table-title">Used by {guilds.length} server{guilds.length === 1 ? "" : "s"}</span>
+                </div>
+            </div>
+            <div class="split">
+                <div class="left" style="max-height: {max_height}px;">
                     <table class="item-table">
                         <thead>
                             <tr>
@@ -69,8 +90,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="right">
-                    <span class="table-title">Used by {guilds.length} server{guilds.length === 1 ? "" : "s"}</span>
+                <div class="right" style="max-height: {max_height}px;">
                     <div class="server-table" >
                         {#each guilds as guild}
                             {#if guild.icon && guild.name}
@@ -82,8 +102,10 @@
                                 </div>
                             {/if}
                         {/each}
-                        {#if guilds.length > 62}
-                            <div class="guild">... and {guilds.length - 62}</div>
+                        {#if missing_guilds > 0}
+                            <div class="guild">
+                                <span>{missing_guilds} not shown</span>
+                            </div>
                         {/if}
                     </div>
                 </div>
@@ -130,17 +152,18 @@
         width: 100%;
     }
 
-    .split {
+    .split, .split-headers {
         width: 100%;
         display: flex;
     }
 
-    .split .left, .split .right {
+    .left, .right {
         width: 50%;
         display: flex;
         flex-direction: column;
         align-items: center;
         margin: 0 10px;
+        overflow: auto;
     }
 
     .item-table {
