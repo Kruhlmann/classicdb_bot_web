@@ -47,7 +47,7 @@ export async function get(req, res, next) {
 			hits_count: db_items.reduce((sum, b) => {
 				return {hits: sum.hits + parseInt(b.hits)}
 			}).hits,
-			items: ii_items.sort((a, b) => b.hits - a.hits).slice(0, 17),
+			items: ii_items.sort((a, b) => b.hits - a.hits),
 		}));
 	} catch (err) {
 		console.log(err)
