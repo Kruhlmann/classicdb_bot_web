@@ -24,11 +24,13 @@
     let max_height = 0;
     let title_container;
     let split_header;
+    let rankings;
 
     function update_height() {
         max_height = window.innerHeight
             - title_container.clientHeight
             - split_header.clientHeight
+            - rankings.clientHeight
             - 20;
     }
 
@@ -57,7 +59,7 @@
         <img src="/icons/favicon-96x96.png" alt="wow icon">
         <h1 class="main-title">classic db bot</h1>
     </div>
-    <div class="rankings">
+    <div class="rankings" bind:this={rankings}>
         {#if guilds.length > 0}
             <div class="rank gold">
                 <div class="guild">
