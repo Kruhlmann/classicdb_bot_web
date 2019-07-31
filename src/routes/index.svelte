@@ -18,7 +18,7 @@
     export let hits_count;
     export let items;
 
-    const missing_guilds = guilds.filter((g) => !g.icon && !g.name).length;
+    const missing_guilds = guilds.filter((g) => !g.name).length;
 
     let loaded = false;
     let max_height = 0;
@@ -34,6 +34,8 @@
 
     onMount(() => {
         loaded = true;
+
+    console.table(guilds)
         update_height();
         window.addEventListener("resize", update_height);
     });
@@ -54,6 +56,41 @@
     <div class="title-container" bind:this={title_container}>
         <img src="/icons/favicon-96x96.png" alt="wow icon">
         <h1 class="main-title">classic db bot</h1>
+    </div>
+    <div class="rankings">
+        {#if guilds.length > 0}
+            <div class="rank gold">
+                <div class="guild">
+                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[0].icon}">
+                    <div class="guild-tooltip">
+                        <span>{guilds[0].name}</span>
+                    </div>
+                </div>
+                <span class="subtitle">{guilds[0].hits} ITEMS</span>
+            </div>
+        {/if}
+        {#if guilds.length > 1}
+            <div class="rank silver">
+                <div class="guild">
+                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[1].icon}">
+                    <div class="guild-tooltip">
+                        <span>{guilds[1].name}</span>
+                    </div>
+                </div>
+                <span class="subtitle">{guilds[1].hits} ITEMS</span>
+            </div>
+        {/if}
+        {#if guilds.length > 2}
+            <div class="rank bronze">
+                <div class="guild">
+                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[2].icon}">
+                    <div class="guild-tooltip">
+                        <span>{guilds[2].name}</span>
+                    </div>
+                </div>
+                <span class="subtitle">{guilds[2].hits} ITEMS</span>
+            </div>
+        {/if}
     </div>
     {#if loaded}
         <div class="viewbox-content" transition:fly={{ y: 60, duration: 1200 }}>
@@ -245,6 +282,39 @@
         top: 5px;
         right: 5px;
         display: flex;
+    }
+
+    .rankings {
+        display: flex;
+    }
+
+    .rankings .rank {
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+    }
+
+    .rankings .rank .subtitle {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    .rankings .rank .guild {
+        border-width: 8px;
+        margin: 0 auto;
+        margin-bottom: 12px;
+    }
+
+    .rankings .rank.gold .guild {
+        border-color: #d7ba16;
+    }
+
+    .rankings .rank.silver .guild {
+        border-color: #afaaaa;
+    }
+
+    .rankings .rank.bronze .guild {
+        border-color: #8d560d;
     }
 
     .social svg {

@@ -42,8 +42,18 @@ export async function get(req, res, next) {
 			}
 		}
 
+		const sorted_guilds = guilds.map((guild) => {
+			guild.hits = 0;
+			db_items.forEach((hit) => {
+				if (hit.server_id === guild.id) {
+					guild.hits += parseInt(hit.hits);
+				}
+			});
+			return guild;
+		}).sort((a, b) => b.hits - a.hits);
+
 		res.end(JSON.stringify({
-			guilds,
+			guilds: sorted_guilds || [],
 			hits_count: db_items.reduce((sum, b) => {
 				return {hits: sum.hits + parseInt(b.hits)}
 			}).hits,
