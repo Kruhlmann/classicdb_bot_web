@@ -39,7 +39,7 @@ export async function get(req, res, next) {
 				console.log(`Missing item ${item.item_id}`)
 				return true;
 			}
-		})
+		});
 		console.log(`${missing_item_count.length} items have not been cached`);
 
 		const missing_items = db_items.map(async (item) => {
@@ -77,9 +77,12 @@ export async function get(req, res, next) {
 			if (existing_item) {
 				existing_item.hits += item.hits;
 			} else {
-				item_match.hits = item.hits;
-				item_match.id = item.item_id;
-				ii_items.push(item_match);
+				if (item.hits > 5) {
+					const pruned_item = item_match.Current;
+					pruned_item.hits = item.hits;
+					pruned_item.id = item.item_id;
+					ii_items.push(pruned_item);
+				}
 			}
 		}
 
