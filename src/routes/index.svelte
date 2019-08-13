@@ -141,7 +141,10 @@
                         {/each}
                         {#if missing_guilds > 0}
                             <div class="guild">
-                                <span>{missing_guilds} not shown</span>
+                                <img class="guild-icon" alt="guild icon" src="/icons/default-discord-server.png">
+                                <div class="guild-tooltip">
+                                    <span>{missing_guilds} not shown</span>
+                                </div>
                             </div>
                         {/if}
                     </div>
