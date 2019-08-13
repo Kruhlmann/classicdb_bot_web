@@ -36,7 +36,6 @@
 
     onMount(() => {
         loaded = true;
-        console.table(items);
         update_height();
         window.addEventListener("resize", update_height);
     });
