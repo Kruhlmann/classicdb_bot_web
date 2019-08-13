@@ -1,7 +1,11 @@
 import * as sqlite from "sqlite";
 import { database_path, itemization_api_key } from "../../config.js";
 const request = require("request-promise");
+import * as fs from "fs";
+import * as path from "path";
 
+const item_cache_path = path.resolve("items.json");
+const culprits_path = path.resolve("culprits.json");
 
 function get_item(item_id) {
 	return request({
@@ -17,28 +21,65 @@ function get_item(item_id) {
 
 export async function get(req, res, next) {
 	try {
-		const db = await sqlite.open(database_path);
 		res.writeHead(200, {
 			"Content-Type": "application/json",
 		});
 
+		const item_cache = JSON.parse(fs.readFileSync(item_cache_path));
+		const culprits = JSON.parse(fs.readFileSync(culprits_path));
+		const db = await sqlite.open(database_path);
+
 		const guilds = await db.all("SELECT * FROM guild_configs");
 		const db_items = await db.all("SELECT * FROM queries ORDER BY hits DESC");
 		const ii_items = [];
+		const missing_item_count = db_items.filter((item) => {
+			const found_item = item_cache.find((i) => `${i.ID}` === item.item_id);
+			const found_culprit = culprits.find((i) => i === item.item_id);
+			if (!found_item && !found_culprit) {
+				console.log(`Missing item ${item.item_id}`)
+				return true;
+			}
+		})
+		console.log(`${missing_item_count.length} items have not been cached`);
+
+		const missing_items = db_items.map(async (item) => {
+			const found_item = item_cache.find((i) => `${i.ID}` === item.item_id);
+			const found_culprit = culprits.find((i) => i === item.item_id);
+			if (!found_item && !found_culprit) {
+				return {id: item.item_id, item: await get_item(item.item_id)};
+			}
+		});
+
+		for (const _missing_item of missing_items) {
+			const missing_item = await _missing_item;
+			if (!missing_item || !missing_item.item) {
+				continue;
+			}
+			if (missing_item.item.length === 0) {
+				if (!culprits.includes(missing_item.id)) {
+					culprits.push(missing_item.id);
+					fs.writeFileSync(culprits_path, JSON.stringify(culprits));
+				}
+				continue;
+			}
+			item_cache.push(missing_item.item[0]);
+			fs.writeFileSync(item_cache_path, JSON.stringify(item_cache));
+		}
 
 		for (const item of db_items) {
-			const resolved_item = await get_item(item.item_id);
-			if (resolved_item.length < 1 || !resolved_item[0].Current) {
+			const item_match = item_cache.find((i) => `${i.ID}` === item.item_id);
+			if (!item_match) {
 				continue;
 			}
 
 			const existing_item = ii_items.find((i) => i.id === item.item_id);
+
 			if (existing_item) {
 				existing_item.hits += item.hits;
 			} else {
-				resolved_item[0].Current.hits = item.hits;
-				resolved_item[0].Current.id = item.item_id;
-				ii_items.push(resolved_item[0].Current);
+				item_match.hits = item.hits;
+				item_match.id = item.item_id;
+				ii_items.push(item_match);
 			}
 		}
 
