@@ -31,16 +31,16 @@ function db_item_filter(db_items, item_cache, culprits) {
 }
 
 function db_items_to_obj(db_items) {
-    return db_items.map((item) => {
+    return db_items.map(async (item) => {
         const found_item = item_cache.find((i) => `${i.ID}` === item.item_id);
         const found_culprit = culprits.find((i) => i === item.item_id);
         if (!found_item && !found_culprit) {
             return {id: item.item_id, item: await get_item(item.item_id)};
         }
-    }
+    });
 }
 
-function update_local_storage(missing_items, culprits, culprits_path, item_cache, item_cache_path) {
+async function update_local_storage(missing_items, culprits, culprits_path, item_cache, item_cache_path) {
     for (const _missing_item of missing_items) {
         const missing_item = await _missing_item;
         if (!missing_item || !missing_item.item) {
