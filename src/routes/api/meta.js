@@ -19,7 +19,7 @@ function get_item(item_id) {
     });
 }
 
-function db_item_filter(db_items, item_cache, culprits) {
+function db_items_filter(db_items, item_cache, culprits) {
     return db_items.filter((item) => {
         const found_item = item_cache.find((i) => `${i.ID}` === item.item_id);
         const found_culprit = culprits.find((i) => i === item.item_id);
