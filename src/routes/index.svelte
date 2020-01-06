@@ -1,6 +1,8 @@
 <script context="module">
+    import { api_uri } from "../config.js";
+
     export function preload() {
-        return this.fetch("/api/meta").then((r) => r.json()).then((stats) => {
+        return this.fetch(api_uri).then((r) => r.json()).then((stats) => {
             return {
                 guilds: stats.guilds,
                 hits_count: stats.hits_count,
