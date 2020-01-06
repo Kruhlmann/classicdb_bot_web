@@ -1,8 +1,8 @@
 <script context="module">
-    import { api_uri } from "../config.js";
+    import { base_uri } from "../config.js";
 
     export function preload() {
-        return this.fetch(api_uri).then((r) => r.json()).then((stats) => {
+        return this.fetch(`${base_uri}/api/meta`).then((r) => r.json()).then((stats) => {
             return {
                 guilds: stats.guilds,
                 hits_count: stats.hits_count,
@@ -63,7 +63,7 @@
         {#if guilds.length > 0}
             <div class="rank gold">
                 <div class="guild">
-                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[0].icon}">
+                    <img class="guild-icon" alt="guild icon" src="{base_uri}/icons/guilds/{guilds[0].icon}">
                     <div class="guild-tooltip">
                         <span>{guilds[0].name}</span>
                     </div>
@@ -74,7 +74,7 @@
         {#if guilds.length > 1}
             <div class="rank silver">
                 <div class="guild">
-                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[1].icon}">
+                    <img class="guild-icon" alt="guild icon" src="{base_uri}/icons/guilds/{guilds[1].icon}">
                     <div class="guild-tooltip">
                         <span>{guilds[1].name}</span>
                     </div>
@@ -85,7 +85,7 @@
         {#if guilds.length > 2}
             <div class="rank bronze">
                 <div class="guild">
-                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guilds[2].icon}">
+                    <img class="guild-icon" alt="guild icon" src="{base_uri}/icons/guilds/{guilds[2].icon}">
                     <div class="guild-tooltip">
                         <span>{guilds[2].name}</span>
                     </div>
@@ -134,7 +134,7 @@
                         {#each guilds as guild}
                             {#if guild.icon && guild.name}
                                 <div class="guild">
-                                    <img class="guild-icon" alt="guild icon" src="/icons/guilds/{guild.icon}">
+                                    <img class="guild-icon" alt="guild icon" src="{base_uri}/icons/guilds/{guild.icon}">
                                     <div class="guild-tooltip">
                                         <span>{guild.name}</span>
                                     </div>
@@ -143,7 +143,7 @@
                         {/each}
                         {#if missing_guilds > 0}
                             <div class="guild">
-                                <img class="guild-icon" alt="guild icon" src="/icons/default-discord-server.png">
+                                <img class="guild-icon" alt="guild icon" src="{base_uri}/icons/default-discord-server.png">
                                 <div class="guild-tooltip">
                                     <span>{missing_guilds} not shown</span>
                                 </div>
